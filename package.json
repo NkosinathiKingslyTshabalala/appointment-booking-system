@@ -1,0 +1,47 @@
+{
+  "name": "appointment-booking-system",
+  "version": "1.0.0",
+  "description": "A full-stack appointment scheduling platform.",
+
+  "main": "index.js",
+
+  "directories": {
+    "doc": "docs"
+  },
+
+  "scripts": {
+    "server": "npm run dev --prefix server",
+    "client": "npm run dev --prefix client",
+    "dev": "concurrently \"npm run server\" \"npm run client\""
+  },
+
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NkosinathiKingslyTshabalala/appointment-booking-system.git"
+  },
+
+  "keywords": [
+    "appointment",
+    "booking",
+    "full-stack",
+    "react",
+    "express",
+    "typescript"
+  ],
+
+  "author": "Nkosinathi Tshabalala",
+
+  "license": "ISC",
+
+  "type": "commonjs",
+
+  "bugs": {
+    "url": "https://github.com/NkosinathiKingslyTshabalala/appointment-booking-system/issues"
+  },
+
+  "homepage": "https://github.com/NkosinathiKingslyTshabalala/appointment-booking-system#readme",
+
+  "devDependencies": {
+    "concurrently": "^10.0.3"
+  }
+}
