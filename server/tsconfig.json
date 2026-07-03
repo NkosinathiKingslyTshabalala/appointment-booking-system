@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "rootDir": "./src",
+    "rootDir": ".",
     "outDir": "./dist",
 
     "module": "Node16",
@@ -17,5 +17,6 @@
     "verbatimModuleSyntax": false,
 
     "skipLibCheck": true
-  }
+  },
+  "include": ["src/**/*.ts", "prisma.config.ts"]
 }
