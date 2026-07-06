@@ -51,27 +51,36 @@ export const login = async (req: Request, res: Response) => {
   try {
     const { email, password } = req.body;
 
-    // Find user
+    // Step 1: find user by email
     const user = await prisma.user.findUnique({ where: { email } });
     if (!user) {
       return res.status(401).json({ message: "Invalid credentials" });
     }
 
-    // Compare password
+    // Step 2: compare password with bcrypt hash
     const match = await bcrypt.compare(password, user.password);
     if (!match) {
       return res.status(401).json({ message: "Invalid credentials" });
     }
 
-    // Generate JWT
+    // Step 3: sign JWT
     const token = jwt.sign(
       { userId: user.id, role: user.role },
       process.env.JWT_SECRET!,
       { expiresIn: "7d" }
     );
 
-    res.json({
-      token,
+    // Step 4: set HTTP-only cookie
+    res.cookie("token", token, {
+      httpOnly: true,   // JS cannot access this cookie
+      secure: process.env.NODE_ENV === "production", // HTTPS only in production
+      sameSite: "strict", // prevents CSRF attacks
+      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days in milliseconds
+    });
+
+    // Step 5: return user without password
+    res.status(200).json({
+      message: "Login successful",
       user: {
         id: user.id,
         name: user.name,

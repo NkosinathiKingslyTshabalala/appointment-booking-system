@@ -2,5 +2,14 @@ module.exports = {
   preset: "ts-jest",
   testEnvironment: "node",
   testMatch: ["**/*.test.ts"],
-  setupFiles: ["dotenv/config"],
+  setupFiles: ["./jest.env.js"],
+  transform: {
+    "^.+\\.tsx?$": [
+      "ts-jest",
+      {
+        tsconfig: "tsconfig.json",
+        diagnostics: { ignoreCodes: [151002] },
+      },
+    ],
+  },
 };

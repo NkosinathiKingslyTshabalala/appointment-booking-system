@@ -1,5 +1,6 @@
 import express from "express";
 import cors from "cors";
+import cookieParser from "cookie-parser";
 import authRoutes from "./routes/auth.routes";
 import providerRoutes from "./routes/provider.routes";
 import serviceRoutes from "./routes/service.routes";
@@ -9,8 +10,9 @@ import notificationRoutes from "./routes/notification.routes";
 
 const app = express();
 
-app.use(cors());
+app.use(cors({ origin: "http://localhost:5173", credentials: true }));
 app.use(express.json());
+app.use(cookieParser());
 
 app.use("/api/auth", authRoutes);
 app.use("/api/providers", providerRoutes);
@@ -19,7 +21,7 @@ app.use("/api/availability", availabilityRoutes);
 app.use("/api/appointments", appointmentRoutes);
 app.use("/api/notifications", notificationRoutes);
 
-app.get("/", (req, res) => {
+app.get("/", (_req, res) => {
   res.json({ message: "Appointment Booking API running" });
 });
 

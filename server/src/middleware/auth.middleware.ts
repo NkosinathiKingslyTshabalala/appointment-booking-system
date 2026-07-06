@@ -11,7 +11,10 @@ export const authenticate = (
   res: Response,
   next: NextFunction
 ) => {
-  const token = req.headers.authorization?.split(" ")[1];
+  // Check Authorization header first, then fall back to cookie
+  const headerToken = req.headers.authorization?.split(" ")[1];
+  const cookieToken = req.cookies?.token;
+  const token = headerToken || cookieToken;
 
   if (!token) {
     return res.status(401).json({ message: "No token provided" });

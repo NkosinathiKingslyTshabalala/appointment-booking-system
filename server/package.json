@@ -7,8 +7,9 @@
     "dev": "ts-node-dev src/server.ts",
     "build": "tsc",
     "start": "node dist/server.js",
-    "test": "jest --passWithNoTests",
-    "test:coverage": "jest --coverage --passWithNoTests"
+    "test": "jest --passWithNoTests --runInBand",
+    "test:coverage": "jest --coverage --passWithNoTests --runInBand"
+
   },
   "keywords": [],
   "author": "",
