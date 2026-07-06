@@ -1,13 +1,23 @@
 import { Router } from "express";
-import { getAppointments, getAppointment, createAppointment, updateAppointment, deleteAppointment } from "../controllers/appointment.controller";
-import { authenticate } from "../middleware/auth.middleware";
+import {
+  getAppointments,
+  getAppointment,
+  createAppointment,
+  updateAppointment,
+  deleteAppointment,
+} from "../controllers/appointment.controller";
+import {
+  requireClient,
+  requireProvider,
+  authenticate,
+} from "../middleware/auth.middleware";
 
 const router = Router();
 
-router.get("/", authenticate, getAppointments);
+router.get("/", ...requireClient, getAppointments);
 router.get("/:id", authenticate, getAppointment);
-router.post("/", authenticate, createAppointment);
-router.put("/:id", authenticate, updateAppointment);
-router.delete("/:id", authenticate, deleteAppointment);
+router.post("/", ...requireClient, createAppointment);
+router.put("/:id", ...requireProvider, updateAppointment);
+router.delete("/:id", ...requireClient, deleteAppointment);
 
 export default router;

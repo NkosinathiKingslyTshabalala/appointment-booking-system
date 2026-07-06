@@ -6,12 +6,12 @@ export interface AuthRequest extends Request {
   userRole?: string;
 }
 
+// ── Verify JWT ───────────────────────────────────────────
 export const authenticate = (
   req: AuthRequest,
   res: Response,
   next: NextFunction
 ) => {
-  // Check Authorization header first, then fall back to cookie
   const headerToken = req.headers.authorization?.split(" ")[1];
   const cookieToken = req.cookies?.token;
   const token = headerToken || cookieToken;
@@ -33,11 +33,35 @@ export const authenticate = (
   }
 };
 
+// ── Generic role checker ─────────────────────────────────
 export const authorizeRoles = (...roles: string[]) => {
   return (req: AuthRequest, res: Response, next: NextFunction) => {
     if (!roles.includes(req.userRole!)) {
-      return res.status(403).json({ message: "Access denied" });
+      return res.status(403).json({
+        message: `Access denied. Required role: ${roles.join(" or ")}`,
+      });
     }
     next();
   };
 };
+
+// ── Dedicated role middlewares ───────────────────────────
+export const requireClient = [
+  authenticate,
+  authorizeRoles("CLIENT"),
+];
+
+export const requireProvider = [
+  authenticate,
+  authorizeRoles("PROVIDER"),
+];
+
+export const requireAdmin = [
+  authenticate,
+  authorizeRoles("ADMIN"),
+];
+
+export const requireProviderOrAdmin = [
+  authenticate,
+  authorizeRoles("PROVIDER", "ADMIN"),
+];
