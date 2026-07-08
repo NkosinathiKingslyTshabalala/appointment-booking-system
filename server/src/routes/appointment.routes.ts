@@ -5,6 +5,9 @@ import {
   createAppointment,
   updateAppointment,
   deleteAppointment,
+  confirmAppointment,
+  completeAppointment,
+  cancelAppointment,
 } from "../controllers/appointment.controller";
 import {
   requireClient,
@@ -14,10 +17,20 @@ import {
 
 const router = Router();
 
-router.get("/", ...requireClient, getAppointments);
+// Public-ish routes
+router.get("/", authenticate, getAppointments);
 router.get("/:id", authenticate, getAppointment);
+
+// Booking
 router.post("/", ...requireClient, createAppointment);
-router.put("/:id", ...requireProvider, updateAppointment);
+
+// Status transitions
+router.put("/:id/confirm", ...requireProvider, confirmAppointment);
+router.put("/:id/complete", ...requireProvider, completeAppointment);
+router.put("/:id/cancel", ...requireClient, cancelAppointment);
+
+// Generic update and delete
+router.put("/:id", authenticate, updateAppointment);
 router.delete("/:id", ...requireClient, deleteAppointment);
 
 export default router;

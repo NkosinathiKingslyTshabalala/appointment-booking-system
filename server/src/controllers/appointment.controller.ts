@@ -241,3 +241,142 @@ export const deleteAppointment = async (req: AuthRequest, res: Response) => {
     res.status(500).json({ message: "Server error", error: err });
   }
 };
+// PUT /api/appointments/:id/confirm — provider confirms appointment
+export const confirmAppointment = async (req: AuthRequest, res: Response) => {
+  try {
+    const appointment = await prisma.appointment.findUnique({
+      where: { id: req.params.id },
+    });
+    if (!appointment) {
+      return res.status(404).json({ message: "Appointment not found" });
+    }
+
+    // Only the assigned provider can confirm
+    const provider = await prisma.provider.findUnique({
+      where: { userId: req.userId },
+    });
+    if (!provider || appointment.providerId !== provider.id) {
+      return res.status(403).json({
+        message: "You can only confirm your own appointments",
+      });
+    }
+
+    // Validate transition
+    if (appointment.status !== "PENDING") {
+      return res.status(400).json({
+        message: `Cannot confirm an appointment with status ${appointment.status}. Only PENDING appointments can be confirmed.`,
+      });
+    }
+
+    const updated = await prisma.appointment.update({
+      where: { id: req.params.id },
+      data: { status: "CONFIRMED" },
+    });
+
+    // Notify client
+    await prisma.notification.create({
+      data: {
+        userId: appointment.clientId,
+        message: "Your appointment has been confirmed by the provider.",
+      },
+    });
+
+    res.json(updated);
+  } catch (err) {
+    res.status(500).json({ message: "Server error", error: err });
+  }
+};
+
+// PUT /api/appointments/:id/complete — provider marks appointment complete
+export const completeAppointment = async (req: AuthRequest, res: Response) => {
+  try {
+    const appointment = await prisma.appointment.findUnique({
+      where: { id: req.params.id },
+    });
+    if (!appointment) {
+      return res.status(404).json({ message: "Appointment not found" });
+    }
+
+    // Only the assigned provider can complete
+    const provider = await prisma.provider.findUnique({
+      where: { userId: req.userId },
+    });
+    if (!provider || appointment.providerId !== provider.id) {
+      return res.status(403).json({
+        message: "You can only complete your own appointments",
+      });
+    }
+
+    // Validate transition
+    if (appointment.status !== "CONFIRMED") {
+      return res.status(400).json({
+        message: `Cannot complete an appointment with status ${appointment.status}. Only CONFIRMED appointments can be completed.`,
+      });
+    }
+
+    const updated = await prisma.appointment.update({
+      where: { id: req.params.id },
+      data: { status: "COMPLETED" },
+    });
+
+    // Notify client
+    await prisma.notification.create({
+      data: {
+        userId: appointment.clientId,
+        message: "Your appointment has been marked as completed.",
+      },
+    });
+
+    res.json(updated);
+  } catch (err) {
+    res.status(500).json({ message: "Server error", error: err });
+  }
+};
+
+// PUT /api/appointments/:id/cancel — client cancels appointment
+export const cancelAppointment = async (req: AuthRequest, res: Response) => {
+  try {
+    const appointment = await prisma.appointment.findUnique({
+      where: { id: req.params.id },
+    });
+    if (!appointment) {
+      return res.status(404).json({ message: "Appointment not found" });
+    }
+
+    // Only the client who booked can cancel
+    if (appointment.clientId !== req.userId) {
+      return res.status(403).json({
+        message: "You can only cancel your own appointments",
+      });
+    }
+
+    // Validate transition — can only cancel PENDING or CONFIRMED
+    if (!["PENDING", "CONFIRMED"].includes(appointment.status)) {
+      return res.status(400).json({
+        message: `Cannot cancel an appointment with status ${appointment.status}. Only PENDING or CONFIRMED appointments can be cancelled.`,
+      });
+    }
+
+    const updated = await prisma.appointment.update({
+      where: { id: req.params.id },
+      data: { status: "CANCELLED" },
+    });
+
+// Notify provider
+const provider = await prisma.provider.findUnique({
+  where: { id: appointment.providerId },
+});
+
+if (provider) {
+  await prisma.notification.create({
+    data: {
+      userId: provider.userId,
+      message: "An appointment has been cancelled by the client.",
+    },
+  });
+}
+    res.json(updated);
+  } catch (err) {
+    res.status(500).json({ message: "Server error", error: err });
+  }
+};
