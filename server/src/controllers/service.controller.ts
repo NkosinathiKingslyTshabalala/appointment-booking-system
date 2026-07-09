@@ -64,7 +64,7 @@ export const getServices = async (req: Request, res: Response) => {
 export const getService = async (req: Request, res: Response) => {
   try {
     const service = await prisma.service.findUnique({
-      where: { id: req.params.id },
+      where: { id: req.params.id as string },
       include: {
         provider: {
           include: {
@@ -87,7 +87,7 @@ export const updateService = async (req: AuthRequest, res: Response) => {
   try {
     // Verify service exists
     const existing = await prisma.service.findUnique({
-      where: { id: req.params.id },
+      where: { id: req.params.id as string },
     });
     if (!existing) {
       return res.status(404).json({ message: "Service not found" });
@@ -104,7 +104,7 @@ export const updateService = async (req: AuthRequest, res: Response) => {
     }
 
     const service = await prisma.service.update({
-      where: { id: req.params.id },
+      where: { id: req.params.id as string },
       data: {
         name: req.body.name,
         price: req.body.price ? parseFloat(req.body.price) : undefined,
@@ -123,7 +123,7 @@ export const deleteService = async (req: AuthRequest, res: Response) => {
   try {
     // Verify service exists
     const existing = await prisma.service.findUnique({
-      where: { id: req.params.id },
+      where: { id: req.params.id as string },
     });
     if (!existing) {
       return res.status(404).json({ message: "Service not found" });
@@ -139,7 +139,7 @@ export const deleteService = async (req: AuthRequest, res: Response) => {
       });
     }
 
-    await prisma.service.delete({ where: { id: req.params.id } });
+    await prisma.service.delete({ where: { id: req.params.id as string } });
 
     res.json({ message: "Service deleted successfully" });
   } catch (err) {

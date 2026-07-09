@@ -5,7 +5,7 @@ import { AuthRequest } from "../middleware/auth.middleware";
 export const getNotifications = async (req: AuthRequest, res: Response) => {
   try {
     const notifications = await prisma.notification.findMany({
-      where: { userId: req.userId },
+      where: { id: req.params.id as string },
       orderBy: { createdAt: "desc" },
     });
     res.json(notifications);
@@ -17,7 +17,7 @@ export const getNotifications = async (req: AuthRequest, res: Response) => {
 export const markAsRead = async (req: AuthRequest, res: Response) => {
   try {
     const notification = await prisma.notification.update({
-      where: { id: req.params.id },
+      where: { id: req.params.id as string },
       data: { read: true },
     });
     res.json(notification);

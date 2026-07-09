@@ -21,8 +21,19 @@ app.use("/api/availability", availabilityRoutes);
 app.use("/api/appointments", appointmentRoutes);
 app.use("/api/notifications", notificationRoutes);
 
+// Root
 app.get("/", (_req, res) => {
   res.json({ message: "Appointment Booking API running" });
+});
+
+// Health check — no auth, used by CI/CD and monitoring
+app.get("/health", (_req, res) => {
+  res.status(200).json({
+    status: "ok",
+    timestamp: new Date(),
+    environment: process.env.NODE_ENV || "development",
+    version: "1.0.0",
+  });
 });
 
 export default app;

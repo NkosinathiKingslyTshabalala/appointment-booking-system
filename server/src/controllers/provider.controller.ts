@@ -49,7 +49,7 @@ export const getProviders = async (_req: Request, res: Response) => {
 export const getProvider = async (req: Request, res: Response) => {
   try {
     const provider = await prisma.provider.findUnique({
-      where: { id: req.params.id },
+      where: { id: req.params.id as string },
       include: {
         user: { select: { id: true, name: true, email: true } },
         services: true,
@@ -70,14 +70,14 @@ export const updateProvider = async (req: AuthRequest, res: Response) => {
   try {
     // Make sure provider exists
     const existing = await prisma.provider.findUnique({
-      where: { id: req.params.id },
+      where: { id: req.params.id as string },
     });
     if (!existing) {
       return res.status(404).json({ message: "Provider not found" });
     }
 
     const provider = await prisma.provider.update({
-      where: { id: req.params.id },
+      where: { id: req.params.id as string },
       data: {
         bio: req.body.bio,
         qualification: req.body.qualification,

@@ -56,7 +56,7 @@ export const getAvailabilityByProvider = async (
   res: Response
 ) => {
   try {
-    const { providerId } = req.params;
+    const providerId = req.params.providerId as string;
 
     const provider = await prisma.provider.findUnique({
       where: { id: providerId },
@@ -93,7 +93,7 @@ export const getAvailability = async (_req: Request, res: Response) => {
 export const updateAvailability = async (req: AuthRequest, res: Response) => {
   try {
     const existing = await prisma.availability.findUnique({
-      where: { id: req.params.id },
+      where: { id: req.params.id as string },
     });
     if (!existing) {
       return res.status(404).json({ message: "Availability not found" });
@@ -101,7 +101,7 @@ export const updateAvailability = async (req: AuthRequest, res: Response) => {
 
     // Verify ownership
     const provider = await prisma.provider.findUnique({
-      where: { userId: req.userId },
+      where: { id: req.params.id as string },
     });
     if (!provider || existing.providerId !== provider.id) {
       return res.status(403).json({
@@ -110,7 +110,7 @@ export const updateAvailability = async (req: AuthRequest, res: Response) => {
     }
 
     const availability = await prisma.availability.update({
-      where: { id: req.params.id },
+      where: { id: req.params.id as string },
       data: { slots: req.body.slots },
     });
 
@@ -124,7 +124,7 @@ export const updateAvailability = async (req: AuthRequest, res: Response) => {
 export const deleteAvailability = async (req: AuthRequest, res: Response) => {
   try {
     const existing = await prisma.availability.findUnique({
-      where: { id: req.params.id },
+      where: { id: req.params.id as string },
     });
     if (!existing) {
       return res.status(404).json({ message: "Availability not found" });
@@ -140,7 +140,7 @@ export const deleteAvailability = async (req: AuthRequest, res: Response) => {
       });
     }
 
-    await prisma.availability.delete({ where: { id: req.params.id } });
+    await prisma.availability.delete({ where: { id: req.params.id as string } });
 
     res.json({ message: "Availability deleted successfully" });
   } catch (err) {
