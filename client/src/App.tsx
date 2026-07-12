@@ -7,6 +7,7 @@ import ProviderAvailability from "./pages/ProviderAvailability";
 import SearchProviders from "./pages/SearchProviders";
 import BookingPage from "./pages/BookingPage";
 import AppointmentHistory from "./pages/AppointmentHistory";
+import ClientDashboard from "./pages/ClientDashboard";
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
       <Route path="/book/:providerId" element={<BookingPage />} />
       <Route path="/appointments" element={<AppointmentHistory />} />
       <Route path="/" element={<Navigate to="/login" replace />} />
+      <Route path="/dashboard" element={<ClientDashboard />} />
     </Routes>
   );
 }

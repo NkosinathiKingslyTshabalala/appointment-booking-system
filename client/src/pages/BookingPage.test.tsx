@@ -45,13 +45,13 @@ function renderBooking() {
 }
 
 describe("BookingPage", () => {
-  it("renders provider name and service selector", async () => {
-    renderBooking();
-    await waitFor(() => {
-      expect(screen.getByText(/book with alice smith/i)).toBeInTheDocument();
-      expect(screen.getByLabelText(/select service/i)).toBeInTheDocument();
-    });
+it("renders provider name and service selector", async () => {
+  renderBooking();
+  await waitFor(() => {
+    expect(screen.getByText(/book an appointment/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/select service/i)).toBeInTheDocument();
   });
+});
 
   it("renders date picker", async () => {
     renderBooking();

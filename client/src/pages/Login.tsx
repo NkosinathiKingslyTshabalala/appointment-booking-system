@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import { useNavigate, Link } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../hooks/useAppDispatch";
 import { loginUser, clearError } from "../store/authSlice";
+import { colors, input, btn, page } from "../styles/theme";
 
 interface LoginFormData {
   email: string;
@@ -12,96 +13,56 @@ interface LoginFormData {
 export default function Login() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { user, loading, error } = useAppSelector((state) => state.auth);
+  const { user, loading, error } = useAppSelector((s) => s.auth);
+  const { register, handleSubmit, formState: { errors } } = useForm<LoginFormData>();
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<LoginFormData>();
-
-  // Redirect if already logged in
   useEffect(() => {
-    if (user) {
-      navigate(user.role === "PROVIDER" ? "/provider/dashboard" : "/dashboard");
-    }
+    if (user) navigate(user.role === "PROVIDER" ? "/provider/dashboard" : "/dashboard");
   }, [user, navigate]);
 
-  // Clear error on unmount
-  useEffect(() => {
-    return () => {
-      dispatch(clearError());
-    };
-  }, [dispatch]);
-
-  const onSubmit = async (data: LoginFormData) => {
-    dispatch(loginUser(data));
-  };
+  useEffect(() => { return () => { dispatch(clearError()); }; }, [dispatch]);
 
   return (
-    <div style={{ maxWidth: 360, margin: "2rem auto", padding: "2rem", border: "1px solid #ccc", borderRadius: 8 }}>
-      <div style={{ textAlign: "center", marginBottom: "1.5rem" }}>
-        <img src="/logo.png" alt="Logo" style={{ height: 48 }} />
+    <div style={{ ...page, display: "flex", justifyContent: "center", alignItems: "center" }}>
+      <div style={{ width: 400, background: colors.bg, border: `1px solid ${colors.border}`, borderRadius: 12, padding: "2rem 2rem 1.5rem" }}>
+        <div style={{ textAlign: "center", marginBottom: "1.5rem" }}>
+          <img src="/logo.png" alt="logo" style={{ height: 44 }} />
+        </div>
+
+        <h2 style={{ textAlign: "center", fontWeight: 400, fontSize: 28, margin: "0 0 1.5rem", color: colors.text }}>
+          Log in
+        </h2>
+
+        {error && <p role="alert" style={{ color: colors.red, textAlign: "center", marginBottom: "1rem", fontSize: 13 }}>{error}</p>}
+
+        <form onSubmit={handleSubmit((data) => dispatch(loginUser(data)))} noValidate>
+          <div style={{ marginBottom: "1rem" }}>
+            <label htmlFor="email" style={{ fontSize: 13, color: colors.text }}>Email</label>
+            <input id="email" style={{ ...input, marginTop: 4 }} type="email" {...register("email", { required: "Email is required" })} />
+            {errors.email && <span role="alert" style={{ color: colors.red, fontSize: 12 }}>{errors.email.message}</span>}
+          </div>
+
+          <div style={{ marginBottom: "1.5rem" }}>
+            <label htmlFor="password" style={{ fontSize: 13, color: colors.text }}>Password</label>
+            <input id="password" style={{ ...input, marginTop: 4 }} type="password" {...register("password", { required: "Password is required" })} />
+            {errors.password && <span role="alert" style={{ color: colors.red, fontSize: 12 }}>{errors.password.message}</span>}
+          </div>
+
+          <button type="submit" disabled={loading} style={{ ...btn, marginBottom: "0.75rem" }}>
+            {loading ? "Logging in..." : "[ Log in ]"}
+          </button>
+        </form>
+
+        <p style={{ textAlign: "center", fontSize: 13, color: colors.muted }}>
+          [ <Link to="/forgot-password" style={{ color: colors.muted }}>Forgot password link</Link> ]
+        </p>
+
+        <hr style={{ border: "none", borderTop: `1px solid ${colors.border}`, margin: "1rem 0" }} />
+
+        <p style={{ textAlign: "center", fontSize: 13, color: colors.muted }}>
+          [ Don't have an account? <Link to="/register" style={{ color: colors.muted }}>Register</Link> ]
+        </p>
       </div>
-
-      <h2 style={{ textAlign: "center", marginBottom: "1.5rem" }}>Log in</h2>
-
-      {error && (
-        <div role="alert" style={{ color: "red", marginBottom: "1rem", textAlign: "center" }}>
-          {error}
-        </div>
-      )}
-
-      <form onSubmit={handleSubmit(onSubmit)} noValidate>
-        <div style={{ marginBottom: "1rem" }}>
-          <label htmlFor="email">Email</label>
-          <input
-            id="email"
-            type="email"
-            style={{ width: "100%", padding: 8, marginTop: 4 }}
-            {...register("email", {
-              required: "Email is required",
-              pattern: { value: /\S+@\S+\.\S+/, message: "Invalid email" },
-            })}
-          />
-          {errors.email && (
-            <span role="alert" style={{ color: "red", fontSize: 12 }}>
-              {errors.email.message}
-            </span>
-          )}
-        </div>
-
-        <div style={{ marginBottom: "1.5rem" }}>
-          <label htmlFor="password">Password</label>
-          <input
-            id="password"
-            type="password"
-            style={{ width: "100%", padding: 8, marginTop: 4 }}
-            {...register("password", { required: "Password is required" })}
-          />
-          {errors.password && (
-            <span role="alert" style={{ color: "red", fontSize: 12 }}>
-              {errors.password.message}
-            </span>
-          )}
-        </div>
-
-        <button
-          type="submit"
-          disabled={loading}
-          style={{ width: "100%", padding: 10, marginBottom: "1rem" }}
-        >
-          {loading ? "Logging in..." : "Log in"}
-        </button>
-      </form>
-
-      <p style={{ textAlign: "center", fontSize: 13 }}>
-        <Link to="/forgot-password">Forgot password?</Link>
-      </p>
-      <hr />
-      <p style={{ textAlign: "center", fontSize: 13 }}>
-        Don't have an account? <Link to="/register">Register</Link>
-      </p>
     </div>
   );
 }
