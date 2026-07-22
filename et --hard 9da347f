@@ -1,0 +1,53 @@
+[33mb4ccd27[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m)[m feat(provider): implement provider dashboard with appointment actions
+[33me37ac7f[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m revert: roll back to c73b18e state
+[33m2846c2e[m ci: add GitHub Actions workflow for Codecov coverage upload
+[33me5170e5[m Admin
+[33mc73b18e[m Codecov link
+[33mb11d7bb[m ci: add Codecov coverage reporting for client and server
+[33mc73cefd[m feat(client): add ProviderDashboard with appointment accept/reject actions
+[33m9da347f[m[33m ([m[1;32mfeat/client-dashboard[m[33m)[m feat(ui): restyle all pages to match wireframes and add ProviderDashboard
+[33m0180c51[m[33m ([m[1;32mfeat/client-ui[m[33m)[m feat(client-ui): add SearchProviders, BookingPage and AppointmentHistory pages with tests
+[33mb29b95e[m[33m ([m[1;32mfeat/provider-ui[m[33m)[m feat(provider-ui): add Provider Profile, Services and Availability pages with tests
+[33mff2f25b[m[33m ([m[1;32mfeat/authentication-ui[m[33m)[m feat(auth-ui): add Login and Register pages with Redux and tests
+[33mf624bc1[m[33m ([m[1;32mfeat/health-check-endpoint[m[33m)[m fix(server): fix req.params.id type errors and corrupted where clauses
+[33ma444936[m[33m ([m[1;32mfeat/frontend-testing-setup[m[33m)[m feat(frontend): set up Vitest testing environment
+[33m1ed0b39[m[33m ([m[1;32mfeat/appointment-management-and-tests[m[33m)[m feat(appointments): add dedicated status transition endpoints and tests
+[33mc11fc87[m[33m ([m[1;32mfeat/booking-api-and-tests[m[33m)[m feat(booking): add booking API with availability and conflict checks
+[33m03da085[m[33m ([m[1;32mfeat/appointment-model-and-statuses[m[33m)[m feat(appointments): add appointment model timestamps and status types
+[33m855d435[m[33m ([m[1;32mfeat/availability-system-and-tests[m[33m)[m feat(availability): add availability system endpoints and tests
+[33m10b7b28[m[33m ([m[1;32mfeat/service-crud-and-tests[m[33m)[m feat(services): add service CRUD endpoints and tests
+[33m0958046[m[33m ([m[1;32mfeat/provider-profile-and-tests[m[33m)[m feat(providers): add provider profile CRUD and tests
+[33m0384cc1[m[33m ([m[1;32mfeat/role-based-access-control[m[33m)[m feat(auth): implement role-based access control and protect protected routes
+[33m6ac5d0d[m[33m ([m[1;32mfeat/login-api-and-tests[m[33m)[m feat(auth): add login API with HTTP-only cookie and login tests
+[33m2f4c17a[m[33m ([m[1;32mfeat/auth-controller-and-register[m[33m)[m feat(auth): add auth controller, routes, middleware and register tests
+[33m594ae4c[m feat(server): add User model with Zod validation and validate middleware
+[33m5717980[m chore(server): add Jest config and update server dependencies
+[33m19597d9[m fix TypeScript config for Prisma integration
+[33ma4cbe17[m initialize backend foundation with Prisma, environment config, and Express server setup
+[33ma2bb691[m Add VS Code workspace settings
+[33mf3d12af[m Deleted
+[33m1e629c2[m Updated 09_deployment_diagram.pdf
+[33m5d06421[m Merge branch 'main' of https://github.com/NkosinathiKingslyTshabalala/appointment-booking-system
+[33ma932a52[m Updated 04_architecture_diagram.pdf
+[33m6cd090d[m Update Trello Board link in README
+[33m5a874db[m Initialized Prisma
+[33me7f7a4f[m Installed Prisma
+[33m71c46fc[m Merge branch 'main' of https://github.com/NkosinathiKingslyTshabalala/appointment-booking-system
+[33m21fcb85[m Updated 09_deployment_diagram
+[33m05831fb[m Added wireframes
+[33m26cc5b6[m Update README with Trello board link and notifications
+[33m99aa6c8[m Added usecase, ER,CLASS ARCHITECTURE,CANCELLATION,BOOKING SEQUENCE,BOOKING ACTIVITY APPOINTMENT STATE, DEPLOYMENT DIAGRAMS  INSTALL vscode-pdf extention to view them.
+[33m903c068[m logo svg and png
+[33m962ce26[m Functional requirements added
+[33mf02bfcc[m API Planning
+[33m1b58b2b[m System Design
+[33m1aecb8e[m  initialize full stack project structure
+[33mfb3f652[m Updated README
+[33mdb20a69[m Create Environment Files
+[33mc34df92[m Fixed depedencies.
+[33m6c8cadb[m Add Backend Script
+[33m92e51e8[m Setup TypeScript Backend
+[33mcf7c70b[m Setup Backend - Install backend packages:
+[33m103e5e3[m Add Bootstrap
+[33m94462b5[m Project Initialization
+[33m48f1c43[m Initial commit

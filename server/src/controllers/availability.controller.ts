@@ -99,19 +99,27 @@ export const updateAvailability = async (req: AuthRequest, res: Response) => {
       return res.status(404).json({ message: "Availability not found" });
     }
 
-    // Verify ownership
     const provider = await prisma.provider.findUnique({
-      where: { id: req.params.id as string },
+      where: { userId: req.userId },
     });
     if (!provider || existing.providerId !== provider.id) {
-      return res.status(403).json({
-        message: "You can only update your own availability",
-      });
+      return res.status(403).json({ message: "You can only update your own availability" });
+    }
+
+    const { slots } = req.body;
+    if (!slots || !Array.isArray(slots)) {
+      return res.status(400).json({ message: "slots array is required" });
+    }
+
+    // If no slots left, delete the record entirely
+    if (slots.length === 0) {
+      await prisma.availability.delete({ where: { id: req.params.id as string } });
+      return res.json({ message: "Availability removed" });
     }
 
     const availability = await prisma.availability.update({
       where: { id: req.params.id as string },
-      data: { slots: req.body.slots },
+      data: { slots },
     });
 
     res.json(availability);

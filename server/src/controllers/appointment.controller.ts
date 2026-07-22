@@ -106,10 +106,17 @@ export const createAppointment = async (req: AuthRequest, res: Response) => {
 // GET /api/appointments — get appointments for logged-in user
 export const getAppointments = async (req: AuthRequest, res: Response) => {
   try {
-    const where =
-      req.userRole === "PROVIDER"
-        ? { providerId: req.userId }
-        : { clientId: req.userId };
+    let where = {};
+
+    if (req.userRole === "PROVIDER") {
+      const provider = await prisma.provider.findUnique({
+        where: { userId: req.userId },
+      });
+      if (!provider) return res.json([]);
+      where = { providerId: provider.id };
+    } else {
+      where = { clientId: req.userId };
+    }
 
     const appointments = await prisma.appointment.findMany({
       where,
